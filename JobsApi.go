@@ -12,7 +12,7 @@ type JobsApi struct {
 
 func NewJobsApi() *JobsApi{
     return &JobsApi {
-        basePath:   "https://192.168.99.100:8080/v1",
+        basePath:   "https://localhost:8080/v1",
     }
 }
 
@@ -119,6 +119,37 @@ func (a JobsApi) JobIdCancelPost (Id string) (JobWrapper, error) {
     return *response, err
 }
 /**
+ * Get the log of a completed job.
+ * Retrieves the log from log storage.
+ * @param Id Job id
+ * @return Log
+ */
+//func (a JobsApi) JobIdLogGet (Id string) (Log, error) {
+func (a JobsApi) JobIdLogGet (Id string) (Log, error) {
+
+    _sling := sling.New().Get(a.basePath)
+
+    // create path and map variables
+    path := "/v1/job/{id}/log"
+    path = strings.Replace(path, "{" + "id" + "}", fmt.Sprintf("%v", Id), -1)
+
+    _sling = _sling.Path(path)
+
+    // accept header
+    accepts := []string { "application/json" }
+    for key := range accepts {
+        _sling = _sling.Set("Accept", accepts[key])
+        break // only use the first Accept
+    }
+
+
+
+    response := new(Log)
+    _, err := _sling.ReceiveSuccess(response)
+    //fmt.Println("JobIdLogGet response: ", response, resp, err)
+    return *response, err
+}
+/**
  * Retry a job.
  * If a job fails, you can retry the job with the original payload.
  * @param Id Job id
@@ -152,10 +183,11 @@ func (a JobsApi) JobIdRetryPost (Id string) (JobWrapper, error) {
 /**
  * Get next job.
  * Gets the next job in the queue, ready for processing.
+ * @param N Number of jobs to return.
  * @return []JobArray
  */
-//func (a JobsApi) JobsGet () ([]JobArray, error) {
-func (a JobsApi) JobsGet () ([]JobArray, error) {
+//func (a JobsApi) JobsGet (N int32) ([]JobArray, error) {
+func (a JobsApi) JobsGet (N int32) ([]JobArray, error) {
 
     _sling := sling.New().Get(a.basePath)
 
@@ -164,6 +196,11 @@ func (a JobsApi) JobsGet () ([]JobArray, error) {
 
     _sling = _sling.Path(path)
 
+    type QueryParams struct {
+        N    int32 `url:"n,omitempty"`
+        
+}
+    _sling = _sling.QueryStruct(&QueryParams{ N: N })
     // accept header
     accepts := []string { "application/json" }
     for key := range accepts {

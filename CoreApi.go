@@ -12,7 +12,7 @@ type CoreApi struct {
 
 func NewCoreApi() *CoreApi{
     return &CoreApi {
-        basePath:   "https://192.168.99.100:8080/v1",
+        basePath:   "https://localhost:8080/v1",
     }
 }
 
@@ -90,10 +90,11 @@ func (a CoreApi) JobIdPatch (Id string, Body JobWrapper) (JobWrapper, error) {
 /**
  * Get next job.
  * Gets the next job in the queue, ready for processing.
+ * @param N Number of jobs to return.
  * @return []JobArray
  */
-//func (a CoreApi) JobsGet () ([]JobArray, error) {
-func (a CoreApi) JobsGet () ([]JobArray, error) {
+//func (a CoreApi) JobsGet (N int32) ([]JobArray, error) {
+func (a CoreApi) JobsGet (N int32) ([]JobArray, error) {
 
     _sling := sling.New().Get(a.basePath)
 
@@ -102,6 +103,11 @@ func (a CoreApi) JobsGet () ([]JobArray, error) {
 
     _sling = _sling.Path(path)
 
+    type QueryParams struct {
+        N    int32 `url:"n,omitempty"`
+        
+}
+    _sling = _sling.QueryStruct(&QueryParams{ N: N })
     // accept header
     accepts := []string { "application/json" }
     for key := range accepts {
