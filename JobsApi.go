@@ -184,10 +184,10 @@ func (a JobsApi) JobIdRetryPost (Id string) (JobWrapper, error) {
  * Get next job.
  * Gets the next job in the queue, ready for processing.
  * @param N Number of jobs to return.
- * @return []JobArray
+ * @return JobArray
  */
-//func (a JobsApi) JobsGet (N int32) ([]JobArray, error) {
-func (a JobsApi) JobsGet (N int32) ([]JobArray, error) {
+//func (a JobsApi) JobsGet (N int32) (JobArray, error) {
+func (a JobsApi) JobsGet (N int32) (JobArray, error) {
 
     _sling := sling.New().Get(a.basePath)
 
@@ -210,7 +210,7 @@ func (a JobsApi) JobsGet (N int32) ([]JobArray, error) {
 
 
 
-    response := new([]JobArray)
+    response := new(JobArray)
     _, err := _sling.ReceiveSuccess(response)
     //fmt.Println("JobsGet response: ", response, resp, err)
     return *response, err
