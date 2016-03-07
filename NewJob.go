@@ -11,5 +11,6 @@ type NewJob struct {
     Timeout  int32  `json:"timeout,omitempty"`
     Priority  int32  `json:"priority,omitempty"`
     Retries  int32  `json:"retries,omitempty"`
+    RetriesDelay  int32  `json:"retries_delay,omitempty"`
     
 }
