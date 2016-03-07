@@ -6,6 +6,7 @@ import (
 
 type Job struct {
     Image  string  `json:"image,omitempty"`
+    RetryFromId  string  `json:"retry_from_id,omitempty"`
     CreatedAt  time.Time  `json:"created_at,omitempty"`
     Priority  int32  `json:"priority,omitempty"`
     RetriesDelay  int32  `json:"retries_delay,omitempty"`
