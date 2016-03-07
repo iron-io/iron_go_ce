@@ -18,6 +18,7 @@ type Job struct {
     Name  string  `json:"name,omitempty"`
     StartedAt  time.Time  `json:"started_at,omitempty"`
     Id  string  `json:"id,omitempty"`
+    RetryId  string  `json:"retry_id,omitempty"`
     Status  string  `json:"status,omitempty"`
     
 }
