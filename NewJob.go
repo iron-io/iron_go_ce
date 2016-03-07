@@ -12,5 +12,6 @@ type NewJob struct {
     Priority  int32  `json:"priority,omitempty"`
     Retries  int32  `json:"retries,omitempty"`
     RetriesDelay  int32  `json:"retries_delay,omitempty"`
+    RetryFromId  string  `json:"retry_from_id,omitempty"`
     
 }
