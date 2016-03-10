@@ -4,6 +4,6 @@ import (
 )
 
 type ImagesWrapper struct {
-    Jobs  []Job  `json:"jobs,omitempty"`
+    Images  []Image  `json:"images,omitempty"`
     
 }
