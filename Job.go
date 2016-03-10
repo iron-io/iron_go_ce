@@ -10,7 +10,7 @@ type Job struct {
     CreatedAt  time.Time  `json:"created_at,omitempty"`
     Priority  int32  `json:"priority,omitempty"`
     RetriesDelay  int32  `json:"retries_delay,omitempty"`
-    Error  string  `json:"error,omitempty"`
+    Error_  string  `json:"error,omitempty"`
     Timeout  int32  `json:"timeout,omitempty"`
     Retries  int32  `json:"retries,omitempty"`
     CompletedAt  time.Time  `json:"completed_at,omitempty"`
