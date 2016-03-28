@@ -5,21 +5,21 @@ import (
 )
 
 type Job struct {
-    Image  string  `json:"image,omitempty"`
-    RetryFromId  string  `json:"retry_from_id,omitempty"`
-    CreatedAt  time.Time  `json:"created_at,omitempty"`
-    Priority  int32  `json:"priority,omitempty"`
-    RetriesDelay  int32  `json:"retries_delay,omitempty"`
-    Error_  string  `json:"error,omitempty"`
-    Timeout  int32  `json:"timeout,omitempty"`
-    Retries  int32  `json:"retries,omitempty"`
-    CompletedAt  time.Time  `json:"completed_at,omitempty"`
-    Delay  int32  `json:"delay,omitempty"`
-    Payload  string  `json:"payload,omitempty"`
     Name  string  `json:"name,omitempty"`
-    StartedAt  time.Time  `json:"started_at,omitempty"`
+    Image  string  `json:"image,omitempty"`
+    Payload  string  `json:"payload,omitempty"`
+    Delay  int32  `json:"delay,omitempty"`
+    Timeout  int32  `json:"timeout,omitempty"`
+    Priority  int32  `json:"priority,omitempty"`
+    Retries  int32  `json:"retries,omitempty"`
+    RetriesDelay  int32  `json:"retries_delay,omitempty"`
+    RetryFromId  string  `json:"retry_from_id,omitempty"`
     Id  string  `json:"id,omitempty"`
-    RetryId  string  `json:"retry_id,omitempty"`
     Status  string  `json:"status,omitempty"`
+    CreatedAt  time.Time  `json:"created_at,omitempty"`
+    Error_  string  `json:"error,omitempty"`
+    StartedAt  time.Time  `json:"started_at,omitempty"`
+    CompletedAt  time.Time  `json:"completed_at,omitempty"`
+    RetryId  string  `json:"retry_id,omitempty"`
     
 }
