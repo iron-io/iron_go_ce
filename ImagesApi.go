@@ -25,17 +25,19 @@ func NewImagesApiWithBasePath(basePath string) *ImagesApi{
 }
 
 /**
- * Get all image names.
- * TODO: Using images for lack of a better term. See https://github.com/iron-io/titan/issues/43 for discussion.
- * @return ImagesWrapper
+ * Get information for image id.
+ * This gives more details about on image, such as the image name and other statistics.
+ * @param id ID of the image.
+ * @return ImageWrapper
  */
-//func (a ImagesApi) ImagesGet () (ImagesWrapper, error) {
-func (a ImagesApi) ImagesGet () (ImagesWrapper, error) {
+//func (a ImagesApi) ImageIdGet (id string) (ImageWrapper, error) {
+func (a ImagesApi) ImageIdGet (id string) (ImageWrapper, error) {
 
     _sling := sling.New().Get(a.basePath)
 
     // create path and map variables
-    path := "/v1/images"
+    path := "/v1/image/{id}"
+    path = strings.Replace(path, "{" + "id" + "}", fmt.Sprintf("%v", id), -1)
 
     _sling = _sling.Path(path)
 
@@ -47,7 +49,7 @@ func (a ImagesApi) ImagesGet () (ImagesWrapper, error) {
     }
 
 
-  var successPayload = new(ImagesWrapper)
+  var successPayload = new(ImageWrapper)
 
   // We use this map (below) so that any arbitrary error JSON can be handled.
   // FIXME: This is in the absence of this Go generator honoring the non-2xx
@@ -82,19 +84,17 @@ func (a ImagesApi) ImagesGet () (ImagesWrapper, error) {
   return *successPayload, err
 }
 /**
- * Get image by name.
- * NOT IMPLEMENTED YET. This gives more details about on image, such as statistics and what not.
- * @param name Name of the image.
- * @return ImageWrapper
+ * Get all image names.
+ * TODO: Using images for lack of a better term. See https://github.com/iron-io/titan/issues/43 for discussion.
+ * @return ImagesWrapper
  */
-//func (a ImagesApi) ImagesNameGet (name string) (ImageWrapper, error) {
-func (a ImagesApi) ImagesNameGet (name string) (ImageWrapper, error) {
+//func (a ImagesApi) ImagesGet () (ImagesWrapper, error) {
+func (a ImagesApi) ImagesGet () (ImagesWrapper, error) {
 
     _sling := sling.New().Get(a.basePath)
 
     // create path and map variables
-    path := "/v1/images/{name}"
-    path = strings.Replace(path, "{" + "name" + "}", fmt.Sprintf("%v", name), -1)
+    path := "/v1/images"
 
     _sling = _sling.Path(path)
 
@@ -106,7 +106,7 @@ func (a ImagesApi) ImagesNameGet (name string) (ImageWrapper, error) {
     }
 
 
-  var successPayload = new(ImageWrapper)
+  var successPayload = new(ImagesWrapper)
 
   // We use this map (below) so that any arbitrary error JSON can be handled.
   // FIXME: This is in the absence of this Go generator honoring the non-2xx
