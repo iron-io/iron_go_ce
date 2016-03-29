@@ -1,4 +1,4 @@
-package titan
+package swagger
 
 import (
     "strings"
@@ -211,8 +211,8 @@ func (a CoreApi) JobsConsumeGet (n int32) (JobsWrapper, error) {
  * @param body Array of jobs to post.
  * @return JobsWrapper
  */
-//func (a CoreApi) JobsPost (body NewJobsWrapper) (JobsWrapper, error) {
-func (a CoreApi) JobsPost (body NewJobsWrapper) (JobsWrapper, error) {
+//func (a CoreApi) JobsPost (body JobSubmissionsWrapper) (JobsWrapper, error) {
+func (a CoreApi) JobsPost (body JobSubmissionsWrapper) (JobsWrapper, error) {
 
     _sling := sling.New().Post(a.basePath)
 

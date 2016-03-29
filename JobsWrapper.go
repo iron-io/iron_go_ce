@@ -1,4 +1,4 @@
-package titan
+package swagger
 
 import (
 )
