@@ -1,7 +1,6 @@
-package titan
+package swagger
 
 import (
-    "time"
 )
 
 type JobSubmissionWithImage struct {
@@ -11,7 +10,6 @@ type JobSubmissionWithImage struct {
     Priority  int32  `json:"priority,omitempty"`
     MaxRetries  int32  `json:"max_retries,omitempty"`
     RetriesDelay  int32  `json:"retries_delay,omitempty"`
-    Image  string  `json:"image,omitempty"`
-    CreatedAt  time.Time  `json:"created_at,omitempty"`
+    Image  Image  `json:"image,omitempty"`
     
 }
