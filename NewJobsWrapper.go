@@ -1,9 +1,9 @@
-package titan
+package swagger
 
 import (
 )
 
 type NewJobsWrapper struct {
-    Jobs  []NewJobWithImage  `json:"jobs,omitempty"`
+    Jobs  []NewJob  `json:"jobs,omitempty"`
     
 }

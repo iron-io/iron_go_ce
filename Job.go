@@ -5,6 +5,7 @@ import (
 )
 
 type Job struct {
+    Image  string  `json:"image,omitempty"`
     Payload  string  `json:"payload,omitempty"`
     Delay  int32  `json:"delay,omitempty"`
     Timeout  int32  `json:"timeout,omitempty"`
@@ -15,7 +16,6 @@ type Job struct {
     Status  string  `json:"status,omitempty"`
     ImageId  string  `json:"image_id,omitempty"`
     Reason  Reason  `json:"reason,omitempty"`
-    Details  string  `json:"details,omitempty"`
     CreatedAt  time.Time  `json:"created_at,omitempty"`
     StartedAt  time.Time  `json:"started_at,omitempty"`
     CompletedAt  time.Time  `json:"completed_at,omitempty"`

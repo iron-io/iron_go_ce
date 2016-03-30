@@ -646,8 +646,8 @@ func (a JobsApi) JobsGet (n int32) (JobsWrapper, error) {
  * @param body Array of jobs to post.
  * @return JobsWrapper
  */
-//func (a JobsApi) JobsPost (body JobSubmissionsWrapper) (JobsWrapper, error) {
-func (a JobsApi) JobsPost (body JobSubmissionsWrapper) (JobsWrapper, error) {
+//func (a JobsApi) JobsPost (body NewJobsWrapper) (JobsWrapper, error) {
+func (a JobsApi) JobsPost (body NewJobsWrapper) (JobsWrapper, error) {
 
     _sling := sling.New().Post(a.basePath)
 
