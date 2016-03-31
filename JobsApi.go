@@ -155,8 +155,8 @@ func (a JobsApi) JobIdDelete (id string) (error) {
  * @param log Output log for the job. Content-Type must be \&quot;text/plain; charset=utf-8\&quot;.
  * @return JobWrapper
  */
-//func (a JobsApi) JobIdFailPost (id string, reason string, details string, log *os.File) (JobWrapper, error) {
-func (a JobsApi) JobIdFailPost (id string, reason string, details string, log *os.File) (JobWrapper, error) {
+//func (a JobsApi) JobIdFailPost (id string, reason string, details string, log string) (JobWrapper, error) {
+func (a JobsApi) JobIdFailPost (id string, reason string, details string, log string) (JobWrapper, error) {
 
     _sling := sling.New().Post(a.basePath)
 
@@ -176,7 +176,7 @@ func (a JobsApi) JobIdFailPost (id string, reason string, details string, log *o
     type FormParams struct {
         reason    string `url:"reason,omitempty"`
         details    string `url:"details,omitempty"`
-        log    *os.File `url:"log,omitempty"`
+        log    string `url:"log,omitempty"`
     }
     _sling = _sling.BodyForm(&FormParams{ reason: reason,details: details,log: log })
 
