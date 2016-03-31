@@ -6,7 +6,6 @@ import (
     "encoding/json"
     "errors"
     "github.com/dghubble/sling"
-    "os"
 )
 
 type JobsApi struct {
@@ -398,8 +397,8 @@ func (a JobsApi) JobIdRetryPost (id string) (JobWrapper, error) {
  * @param log Output log for the job. Content-Type must be \&quot;text/plain; charset=utf-8\&quot;.
  * @return JobWrapper
  */
-//func (a JobsApi) JobIdSuccessPost (id string, log *os.File) (JobWrapper, error) {
-func (a JobsApi) JobIdSuccessPost (id string, log *os.File) (JobWrapper, error) {
+//func (a JobsApi) JobIdSuccessPost (id string, log string) (JobWrapper, error) {
+func (a JobsApi) JobIdSuccessPost (id string, log string) (JobWrapper, error) {
 
     _sling := sling.New().Post(a.basePath)
 
@@ -417,7 +416,7 @@ func (a JobsApi) JobIdSuccessPost (id string, log *os.File) (JobWrapper, error) 
     }
 
     type FormParams struct {
-        log    *os.File `url:"log,omitempty"`
+        log    string `url:"log,omitempty"`
     }
     _sling = _sling.BodyForm(&FormParams{ log: log })
 
