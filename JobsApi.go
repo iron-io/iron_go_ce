@@ -6,6 +6,7 @@ import (
     "encoding/json"
     "errors"
     "github.com/dghubble/sling"
+    "os"
 )
 
 type JobsApi struct {
@@ -154,8 +155,8 @@ func (a JobsApi) JobIdDelete (id string) (error) {
  * @param log Output log for the job. Content-Type must be \&quot;text/plain; charset=utf-8\&quot;.
  * @return JobWrapper
  */
-//func (a JobsApi) JobIdFailPost (id string, reason string, details string, log string) (JobWrapper, error) {
-func (a JobsApi) JobIdFailPost (id string, reason string, details string, log string) (JobWrapper, error) {
+//func (a JobsApi) JobIdFailPost (id string, reason string, details string, log *os.File) (JobWrapper, error) {
+func (a JobsApi) JobIdFailPost (id string, reason string, details string, log *os.File) (JobWrapper, error) {
 
     _sling := sling.New().Post(a.basePath)
 
@@ -175,7 +176,7 @@ func (a JobsApi) JobIdFailPost (id string, reason string, details string, log st
     type FormParams struct {
         reason    string `url:"reason,omitempty"`
         details    string `url:"details,omitempty"`
-        log    string `url:"log,omitempty"`
+        log    *os.File `url:"log,omitempty"`
     }
     _sling = _sling.BodyForm(&FormParams{ reason: reason,details: details,log: log })
 
@@ -397,8 +398,8 @@ func (a JobsApi) JobIdRetryPost (id string) (JobWrapper, error) {
  * @param log Output log for the job. Content-Type must be \&quot;text/plain; charset=utf-8\&quot;.
  * @return JobWrapper
  */
-//func (a JobsApi) JobIdSuccessPost (id string, log string) (JobWrapper, error) {
-func (a JobsApi) JobIdSuccessPost (id string, log string) (JobWrapper, error) {
+//func (a JobsApi) JobIdSuccessPost (id string, log *os.File) (JobWrapper, error) {
+func (a JobsApi) JobIdSuccessPost (id string, log *os.File) (JobWrapper, error) {
 
     _sling := sling.New().Post(a.basePath)
 
@@ -416,7 +417,7 @@ func (a JobsApi) JobIdSuccessPost (id string, log string) (JobWrapper, error) {
     }
 
     type FormParams struct {
-        log    string `url:"log,omitempty"`
+        log    *os.File `url:"log,omitempty"`
     }
     _sling = _sling.BodyForm(&FormParams{ log: log })
 
