@@ -6,6 +6,7 @@ import (
     "encoding/json"
     "errors"
     "github.com/dghubble/sling"
+    "time"
     "os"
 )
 
@@ -26,19 +27,87 @@ func NewJobsApiWithBasePath(basePath string) *JobsApi{
 }
 
 /**
+ * Get job list by group name.
+ * This will list jobs for a particular group.
+ * @param groupName Name of group for this set of jobs.
+ * @param createdAfter Will return jobs created after this time. In RFC3339 format.
+ * @param n Number of jobs to return.
+ * @return JobsWrapper
+ */
+//func (a JobsApi) GroupsGroupNameJobsGet (groupName string, createdAfter time.Time, n int32) (JobsWrapper, error) {
+func (a JobsApi) GroupsGroupNameJobsGet (groupName string, createdAfter time.Time, n int32) (JobsWrapper, error) {
+
+    _sling := sling.New().Get(a.basePath)
+
+    // create path and map variables
+    path := "/v1/groups/{group_name}/jobs"
+    path = strings.Replace(path, "{" + "group_name" + "}", fmt.Sprintf("%v", groupName), -1)
+
+    _sling = _sling.Path(path)
+
+    type QueryParams struct {
+        createdAfter    time.Time `url:"created_after,omitempty"`
+        n    int32 `url:"n,omitempty"`
+        
+}
+    _sling = _sling.QueryStruct(&QueryParams{ createdAfter: createdAfter,n: n })
+    // accept header
+    accepts := []string { "application/json" }
+    for key := range accepts {
+        _sling = _sling.Set("Accept", accepts[key])
+        break // only use the first Accept
+    }
+
+
+  var successPayload = new(JobsWrapper)
+
+  // We use this map (below) so that any arbitrary error JSON can be handled.
+  // FIXME: This is in the absence of this Go generator honoring the non-2xx
+  // response (error) models, which needs to be implemented at some point.
+  var failurePayload map[string]interface{}
+
+  httpResponse, err := _sling.Receive(successPayload, &failurePayload)
+
+  if err == nil {
+    // err == nil only means that there wasn't a sub-application-layer error (e.g. no network error)
+    if failurePayload != nil {
+      // If the failurePayload is present, there likely was some kind of non-2xx status
+      // returned (and a JSON payload error present)
+      var str []byte
+      str, err = json.Marshal(failurePayload)
+      if err == nil { // For safety, check for an error marshalling... probably superfluous
+        // This will return the JSON error body as a string
+        err = errors.New(string(str))
+      }
+  } else {
+    // So, there was no network-type error, and nothing in the failure payload,
+    // but we should still check the status code
+    if httpResponse == nil {
+      // This should never happen...
+      err = errors.New("No HTTP Response received.")
+    } else if code := httpResponse.StatusCode; 200 > code || code > 299 {
+        err = errors.New("HTTP Error: " + string(httpResponse.StatusCode))
+      }
+    }
+  }
+
+  return *successPayload, err
+}
+/**
  * Cancel a job.
  * Cancels a job in delayed, queued or running status. The worker may continue to run a running job. reason is set to `client_request`.
+ * @param groupName Name of group for this set of jobs.
  * @param id Job id
- * @param details Human-readable detailed message explaining cancellation reason.
  * @return JobWrapper
  */
-//func (a JobsApi) JobIdCancelPost (id string, details string) (JobWrapper, error) {
-func (a JobsApi) JobIdCancelPost (id string, details string) (JobWrapper, error) {
+//func (a JobsApi) GroupsGroupNameJobsIdCancelPost (groupName string, id string) (JobWrapper, error) {
+func (a JobsApi) GroupsGroupNameJobsIdCancelPost (groupName string, id string) (JobWrapper, error) {
 
     _sling := sling.New().Post(a.basePath)
 
     // create path and map variables
-    path := "/v1/job/{id}/cancel"
+    path := "/v1/groups/{group_name}/jobs/{id}/cancel"
+    path = strings.Replace(path, "{" + "group_name" + "}", fmt.Sprintf("%v", groupName), -1)
     path = strings.Replace(path, "{" + "id" + "}", fmt.Sprintf("%v", id), -1)
 
     _sling = _sling.Path(path)
@@ -50,8 +119,6 @@ func (a JobsApi) JobIdCancelPost (id string, details string) (JobWrapper, error)
         break // only use the first Accept
     }
 
-// body params
-    _sling = _sling.BodyJSON(details)
 
   var successPayload = new(JobWrapper)
 
@@ -89,17 +156,19 @@ func (a JobsApi) JobIdCancelPost (id string, details string) (JobWrapper, error)
 }
 /**
  * Delete the job.
- * Delete only succeeds if job status is one of `succeeded\n| failed | cancelled`. Cancel a job if it is another state and needs to\nbe deleted.  All information about the job, including the log, is\nirretrievably lost when this is invoked.
+ * Delete only succeeds if job status is one of `succeeded\n| failed | cancelled`. Cancel a job if it is another state and needs to\nbe deleted.  All information about the job, including the log, is\nirretrievably lost when this is invoked.\n
+ * @param groupName Name of group for this set of jobs.
  * @param id Job id
  * @return void
  */
-//func (a JobsApi) JobIdDelete (id string) (error) {
-func (a JobsApi) JobIdDelete (id string) (error) {
+//func (a JobsApi) GroupsGroupNameJobsIdDelete (groupName string, id string) (error) {
+func (a JobsApi) GroupsGroupNameJobsIdDelete (groupName string, id string) (error) {
 
     _sling := sling.New().Delete(a.basePath)
 
     // create path and map variables
-    path := "/v1/job/{id}"
+    path := "/v1/groups/{group_name}/jobs/{id}"
+    path = strings.Replace(path, "{" + "group_name" + "}", fmt.Sprintf("%v", groupName), -1)
     path = strings.Replace(path, "{" + "id" + "}", fmt.Sprintf("%v", id), -1)
 
     _sling = _sling.Path(path)
@@ -149,19 +218,19 @@ func (a JobsApi) JobIdDelete (id string) (error) {
 /**
  * Mark job as failed.
  * Job is marked as failed if it was in a valid state. Job&#39;s `completed_at` time is initialized.
+ * @param groupName Name of group for this set of jobs.
  * @param id Job id
  * @param reason Reason for job failure.
- * @param details Details of job failure.
- * @param log Output log for the job. Content-Type must be \&quot;text/plain; charset=utf-8\&quot;.
  * @return JobWrapper
  */
-//func (a JobsApi) JobIdFailPost (id string, reason string, details string, log *os.File) (JobWrapper, error) {
-func (a JobsApi) JobIdFailPost (id string, reason string, details string, log *os.File) (JobWrapper, error) {
+//func (a JobsApi) GroupsGroupNameJobsIdErrorPost (groupName string, id string, reason string) (JobWrapper, error) {
+func (a JobsApi) GroupsGroupNameJobsIdErrorPost (groupName string, id string, reason string) (JobWrapper, error) {
 
     _sling := sling.New().Post(a.basePath)
 
     // create path and map variables
-    path := "/v1/job/{id}/fail"
+    path := "/v1/groups/{group_name}/jobs/{id}/error"
+    path = strings.Replace(path, "{" + "group_name" + "}", fmt.Sprintf("%v", groupName), -1)
     path = strings.Replace(path, "{" + "id" + "}", fmt.Sprintf("%v", id), -1)
 
     _sling = _sling.Path(path)
@@ -175,10 +244,8 @@ func (a JobsApi) JobIdFailPost (id string, reason string, details string, log *o
 
     type FormParams struct {
         reason    string `url:"reason,omitempty"`
-        details    string `url:"details,omitempty"`
-        log    *os.File `url:"log,omitempty"`
     }
-    _sling = _sling.BodyForm(&FormParams{ reason: reason,details: details,log: log })
+    _sling = _sling.BodyForm(&FormParams{ reason: reason })
 
   var successPayload = new(JobWrapper)
 
@@ -217,16 +284,18 @@ func (a JobsApi) JobIdFailPost (id string, reason string, details string, log *o
 /**
  * Gets job by id
  * Gets a job by id.
+ * @param groupName Name of group for this set of jobs.
  * @param id Job id
  * @return JobWrapper
  */
-//func (a JobsApi) JobIdGet (id string) (JobWrapper, error) {
-func (a JobsApi) JobIdGet (id string) (JobWrapper, error) {
+//func (a JobsApi) GroupsGroupNameJobsIdGet (groupName string, id string) (JobWrapper, error) {
+func (a JobsApi) GroupsGroupNameJobsIdGet (groupName string, id string) (JobWrapper, error) {
 
     _sling := sling.New().Get(a.basePath)
 
     // create path and map variables
-    path := "/v1/job/{id}"
+    path := "/v1/groups/{group_name}/jobs/{id}"
+    path = strings.Replace(path, "{" + "group_name" + "}", fmt.Sprintf("%v", groupName), -1)
     path = strings.Replace(path, "{" + "id" + "}", fmt.Sprintf("%v", id), -1)
 
     _sling = _sling.Path(path)
@@ -276,16 +345,18 @@ func (a JobsApi) JobIdGet (id string) (JobWrapper, error) {
 /**
  * Get the log of a completed job.
  * Retrieves the log from log storage.
+ * @param groupName Name of group for this set of jobs.
  * @param id Job id
  * @return string
  */
-//func (a JobsApi) JobIdLogGet (id string) (string, error) {
-func (a JobsApi) JobIdLogGet (id string) (string, error) {
+//func (a JobsApi) GroupsGroupNameJobsIdLogGet (groupName string, id string) (string, error) {
+func (a JobsApi) GroupsGroupNameJobsIdLogGet (groupName string, id string) (string, error) {
 
     _sling := sling.New().Get(a.basePath)
 
     // create path and map variables
-    path := "/v1/job/{id}/log"
+    path := "/v1/groups/{group_name}/jobs/{id}/log"
+    path = strings.Replace(path, "{" + "group_name" + "}", fmt.Sprintf("%v", groupName), -1)
     path = strings.Replace(path, "{" + "id" + "}", fmt.Sprintf("%v", id), -1)
 
     _sling = _sling.Path(path)
@@ -333,140 +404,21 @@ func (a JobsApi) JobIdLogGet (id string) (string, error) {
   return *successPayload, err
 }
 /**
- * Update a job
- * Typically used to update status on error/completion. TODO: only allow &#39;status&#39; field.
- * @param id Job id
- * @param body Job data to post
- * @return JobWrapper
- */
-//func (a JobsApi) JobIdPatch (id string, body JobWrapper) (JobWrapper, error) {
-func (a JobsApi) JobIdPatch (id string, body JobWrapper) (JobWrapper, error) {
-
-    _sling := sling.New().Patch(a.basePath)
-
-    // create path and map variables
-    path := "/v1/job/{id}"
-    path = strings.Replace(path, "{" + "id" + "}", fmt.Sprintf("%v", id), -1)
-
-    _sling = _sling.Path(path)
-
-    // accept header
-    accepts := []string { "application/json" }
-    for key := range accepts {
-        _sling = _sling.Set("Accept", accepts[key])
-        break // only use the first Accept
-    }
-
-// body params
-    _sling = _sling.BodyJSON(body)
-
-  var successPayload = new(JobWrapper)
-
-  // We use this map (below) so that any arbitrary error JSON can be handled.
-  // FIXME: This is in the absence of this Go generator honoring the non-2xx
-  // response (error) models, which needs to be implemented at some point.
-  var failurePayload map[string]interface{}
-
-  httpResponse, err := _sling.Receive(successPayload, &failurePayload)
-
-  if err == nil {
-    // err == nil only means that there wasn't a sub-application-layer error (e.g. no network error)
-    if failurePayload != nil {
-      // If the failurePayload is present, there likely was some kind of non-2xx status
-      // returned (and a JSON payload error present)
-      var str []byte
-      str, err = json.Marshal(failurePayload)
-      if err == nil { // For safety, check for an error marshalling... probably superfluous
-        // This will return the JSON error body as a string
-        err = errors.New(string(str))
-      }
-  } else {
-    // So, there was no network-type error, and nothing in the failure payload,
-    // but we should still check the status code
-    if httpResponse == nil {
-      // This should never happen...
-      err = errors.New("No HTTP Response received.")
-    } else if code := httpResponse.StatusCode; 200 > code || code > 299 {
-        err = errors.New("HTTP Error: " + string(httpResponse.StatusCode))
-      }
-    }
-  }
-
-  return *successPayload, err
-}
-/**
- * Retry a job.
- * The /retry endpoint can be used to force a retry of jobs with status succeeded or cancelled. It can also be used to retry jobs that in the failed state, but whose max_retries field is 0. The retried job will continue to have max_retries = 0.
- * @param id Job id
- * @return JobWrapper
- */
-//func (a JobsApi) JobIdRetryPost (id string) (JobWrapper, error) {
-func (a JobsApi) JobIdRetryPost (id string) (JobWrapper, error) {
-
-    _sling := sling.New().Post(a.basePath)
-
-    // create path and map variables
-    path := "/v1/job/{id}/retry"
-    path = strings.Replace(path, "{" + "id" + "}", fmt.Sprintf("%v", id), -1)
-
-    _sling = _sling.Path(path)
-
-    // accept header
-    accepts := []string { "application/json" }
-    for key := range accepts {
-        _sling = _sling.Set("Accept", accepts[key])
-        break // only use the first Accept
-    }
-
-
-  var successPayload = new(JobWrapper)
-
-  // We use this map (below) so that any arbitrary error JSON can be handled.
-  // FIXME: This is in the absence of this Go generator honoring the non-2xx
-  // response (error) models, which needs to be implemented at some point.
-  var failurePayload map[string]interface{}
-
-  httpResponse, err := _sling.Receive(successPayload, &failurePayload)
-
-  if err == nil {
-    // err == nil only means that there wasn't a sub-application-layer error (e.g. no network error)
-    if failurePayload != nil {
-      // If the failurePayload is present, there likely was some kind of non-2xx status
-      // returned (and a JSON payload error present)
-      var str []byte
-      str, err = json.Marshal(failurePayload)
-      if err == nil { // For safety, check for an error marshalling... probably superfluous
-        // This will return the JSON error body as a string
-        err = errors.New(string(str))
-      }
-  } else {
-    // So, there was no network-type error, and nothing in the failure payload,
-    // but we should still check the status code
-    if httpResponse == nil {
-      // This should never happen...
-      err = errors.New("No HTTP Response received.")
-    } else if code := httpResponse.StatusCode; 200 > code || code > 299 {
-        err = errors.New("HTTP Error: " + string(httpResponse.StatusCode))
-      }
-    }
-  }
-
-  return *successPayload, err
-}
-/**
- * Mark job as succeeded.
- * Job status is changed to succeeded if it was in a valid state before. Job&#39;s `completed_at` time is initialized.
+ * Send in a log for storage.
+ * Logs are sent after a job completes since they may be very large and the runner can process the next job.
+ * @param groupName Name of group for this set of jobs.
  * @param id Job id
  * @param log Output log for the job. Content-Type must be \&quot;text/plain; charset=utf-8\&quot;.
  * @return JobWrapper
  */
-//func (a JobsApi) JobIdSuccessPost (id string, log *os.File) (JobWrapper, error) {
-func (a JobsApi) JobIdSuccessPost (id string, log *os.File) (JobWrapper, error) {
+//func (a JobsApi) GroupsGroupNameJobsIdLogPost (groupName string, id string, log *os.File) (JobWrapper, error) {
+func (a JobsApi) GroupsGroupNameJobsIdLogPost (groupName string, id string, log *os.File) (JobWrapper, error) {
 
     _sling := sling.New().Post(a.basePath)
 
     // create path and map variables
-    path := "/v1/job/{id}/success"
+    path := "/v1/groups/{group_name}/jobs/{id}/log"
+    path = strings.Replace(path, "{" + "group_name" + "}", fmt.Sprintf("%v", groupName), -1)
     path = strings.Replace(path, "{" + "id" + "}", fmt.Sprintf("%v", id), -1)
 
     _sling = _sling.Path(path)
@@ -518,18 +470,142 @@ func (a JobsApi) JobIdSuccessPost (id string, log *os.File) (JobWrapper, error) 
   return *successPayload, err
 }
 /**
- * Extend job timeout.
- * Consumers can sometimes take a while to run the task after accepting it.  An example is when the runner does not have the docker image locally, it can spend a significant time downloading the image.\nIf the timeout is small, the job may never get to run, or run but not be accepted by Titan. Consumers can touch the job before it times out. Titan will reset the timeout, giving the consumer another timeout seconds to run the job.\nTouch is only valid while the job is in a running state. If touch fails, the runner may stop running the job.
+ * Retry a job.
+ * \&quot;The /retry endpoint can be used to force a retry of jobs\nwith status succeeded or cancelled. It can also be used to retry jobs\nthat in the failed state, but whose max_retries field is 0. The retried\njob will continue to have max_retries = 0.\&quot;\n
+ * @param groupName Name of group for this set of jobs.
  * @param id Job id
- * @return void
+ * @return JobWrapper
  */
-//func (a JobsApi) JobIdTouchPost (id string) (error) {
-func (a JobsApi) JobIdTouchPost (id string) (error) {
+//func (a JobsApi) GroupsGroupNameJobsIdRetryPost (groupName string, id string) (JobWrapper, error) {
+func (a JobsApi) GroupsGroupNameJobsIdRetryPost (groupName string, id string) (JobWrapper, error) {
 
     _sling := sling.New().Post(a.basePath)
 
     // create path and map variables
-    path := "/v1/job/{id}/touch"
+    path := "/v1/groups/{group_name}/jobs/{id}/retry"
+    path = strings.Replace(path, "{" + "group_name" + "}", fmt.Sprintf("%v", groupName), -1)
+    path = strings.Replace(path, "{" + "id" + "}", fmt.Sprintf("%v", id), -1)
+
+    _sling = _sling.Path(path)
+
+    // accept header
+    accepts := []string { "application/json" }
+    for key := range accepts {
+        _sling = _sling.Set("Accept", accepts[key])
+        break // only use the first Accept
+    }
+
+
+  var successPayload = new(JobWrapper)
+
+  // We use this map (below) so that any arbitrary error JSON can be handled.
+  // FIXME: This is in the absence of this Go generator honoring the non-2xx
+  // response (error) models, which needs to be implemented at some point.
+  var failurePayload map[string]interface{}
+
+  httpResponse, err := _sling.Receive(successPayload, &failurePayload)
+
+  if err == nil {
+    // err == nil only means that there wasn't a sub-application-layer error (e.g. no network error)
+    if failurePayload != nil {
+      // If the failurePayload is present, there likely was some kind of non-2xx status
+      // returned (and a JSON payload error present)
+      var str []byte
+      str, err = json.Marshal(failurePayload)
+      if err == nil { // For safety, check for an error marshalling... probably superfluous
+        // This will return the JSON error body as a string
+        err = errors.New(string(str))
+      }
+  } else {
+    // So, there was no network-type error, and nothing in the failure payload,
+    // but we should still check the status code
+    if httpResponse == nil {
+      // This should never happen...
+      err = errors.New("No HTTP Response received.")
+    } else if code := httpResponse.StatusCode; 200 > code || code > 299 {
+        err = errors.New("HTTP Error: " + string(httpResponse.StatusCode))
+      }
+    }
+  }
+
+  return *successPayload, err
+}
+/**
+ * Mark job as succeeded.
+ * Job status is changed to succeeded if it was in a valid state before. Job&#39;s `completed_at` time is initialized.
+ * @param groupName Name of group for this set of jobs.
+ * @param id Job id
+ * @return JobWrapper
+ */
+//func (a JobsApi) GroupsGroupNameJobsIdSuccessPost (groupName string, id string) (JobWrapper, error) {
+func (a JobsApi) GroupsGroupNameJobsIdSuccessPost (groupName string, id string) (JobWrapper, error) {
+
+    _sling := sling.New().Post(a.basePath)
+
+    // create path and map variables
+    path := "/v1/groups/{group_name}/jobs/{id}/success"
+    path = strings.Replace(path, "{" + "group_name" + "}", fmt.Sprintf("%v", groupName), -1)
+    path = strings.Replace(path, "{" + "id" + "}", fmt.Sprintf("%v", id), -1)
+
+    _sling = _sling.Path(path)
+
+    // accept header
+    accepts := []string { "application/json" }
+    for key := range accepts {
+        _sling = _sling.Set("Accept", accepts[key])
+        break // only use the first Accept
+    }
+
+
+  var successPayload = new(JobWrapper)
+
+  // We use this map (below) so that any arbitrary error JSON can be handled.
+  // FIXME: This is in the absence of this Go generator honoring the non-2xx
+  // response (error) models, which needs to be implemented at some point.
+  var failurePayload map[string]interface{}
+
+  httpResponse, err := _sling.Receive(successPayload, &failurePayload)
+
+  if err == nil {
+    // err == nil only means that there wasn't a sub-application-layer error (e.g. no network error)
+    if failurePayload != nil {
+      // If the failurePayload is present, there likely was some kind of non-2xx status
+      // returned (and a JSON payload error present)
+      var str []byte
+      str, err = json.Marshal(failurePayload)
+      if err == nil { // For safety, check for an error marshalling... probably superfluous
+        // This will return the JSON error body as a string
+        err = errors.New(string(str))
+      }
+  } else {
+    // So, there was no network-type error, and nothing in the failure payload,
+    // but we should still check the status code
+    if httpResponse == nil {
+      // This should never happen...
+      err = errors.New("No HTTP Response received.")
+    } else if code := httpResponse.StatusCode; 200 > code || code > 299 {
+        err = errors.New("HTTP Error: " + string(httpResponse.StatusCode))
+      }
+    }
+  }
+
+  return *successPayload, err
+}
+/**
+ * Extend job timeout.
+ * Consumers can sometimes take a while to run the task after accepting it.  An example is when the runner does not have the docker image locally, it can spend a significant time downloading the image.\nIf the timeout is small, the job may never get to run, or run but not be accepted by Titan. Consumers can touch the job before it times out. Titan will reset the timeout, giving the consumer another timeout seconds to run the job.\nTouch is only valid while the job is in a running state. If touch fails, the runner may stop running the job.\n
+ * @param groupName Name of group for this set of jobs.
+ * @param id Job id
+ * @return void
+ */
+//func (a JobsApi) GroupsGroupNameJobsIdTouchPost (groupName string, id string) (error) {
+func (a JobsApi) GroupsGroupNameJobsIdTouchPost (groupName string, id string) (error) {
+
+    _sling := sling.New().Post(a.basePath)
+
+    // create path and map variables
+    path := "/v1/groups/{group_name}/jobs/{id}/touch"
+    path = strings.Replace(path, "{" + "group_name" + "}", fmt.Sprintf("%v", groupName), -1)
     path = strings.Replace(path, "{" + "id" + "}", fmt.Sprintf("%v", id), -1)
 
     _sling = _sling.Path(path)
@@ -577,26 +653,23 @@ func (a JobsApi) JobIdTouchPost (id string) (error) {
   return err
 }
 /**
- * Get next job.
- * Gets the next job in the queue, ready for processing. Titan may return &lt;=n jobs. Consumers should start processing jobs in order. Each returned job is set to `status` \&quot;running\&quot; and `started_at` is set to the current time. No other consumer can retrieve this job.
- * @param n Number of jobs to return.
+ * Enqueue Job
+ * Enqueues job(s). If any of the jobs is invalid, none of the jobs are enqueued.\n
+ * @param groupName name of the group.
+ * @param body Array of jobs to post.
  * @return JobsWrapper
  */
-//func (a JobsApi) JobsConsumeGet (n int32) (JobsWrapper, error) {
-func (a JobsApi) JobsConsumeGet (n int32) (JobsWrapper, error) {
+//func (a JobsApi) GroupsGroupNameJobsPost (groupName string, body NewJobsWrapper) (JobsWrapper, error) {
+func (a JobsApi) GroupsGroupNameJobsPost (groupName string, body NewJobsWrapper) (JobsWrapper, error) {
 
-    _sling := sling.New().Get(a.basePath)
+    _sling := sling.New().Post(a.basePath)
 
     // create path and map variables
-    path := "/v1/jobs/consume"
+    path := "/v1/groups/{group_name}/jobs"
+    path = strings.Replace(path, "{" + "group_name" + "}", fmt.Sprintf("%v", groupName), -1)
 
     _sling = _sling.Path(path)
 
-    type QueryParams struct {
-        n    int32 `url:"n,omitempty"`
-        
-}
-    _sling = _sling.QueryStruct(&QueryParams{ n: n })
     // accept header
     accepts := []string { "application/json" }
     for key := range accepts {
@@ -604,6 +677,8 @@ func (a JobsApi) JobsConsumeGet (n int32) (JobsWrapper, error) {
         break // only use the first Accept
     }
 
+// body params
+    _sling = _sling.BodyJSON(body)
 
   var successPayload = new(JobsWrapper)
 
@@ -640,9 +715,9 @@ func (a JobsApi) JobsConsumeGet (n int32) (JobsWrapper, error) {
   return *successPayload, err
 }
 /**
- * Peek at list of jobs.
- * Get a list of active jobs. This endpoint can be used to observe the state of jobs in Titan. To run a job, use /jobs/consume. TODO: Needs pagination support.
- * @param n Number of jobs to return. Titan may return &lt;=n jobs. Titan does not make any guarantees about job ordering, but jobs will not be repeated. To make sure you get unique jobs, use the cursor effectively. TODO: We don&#39;t actually support pagination.
+ * Get next job.
+ * Gets the next job in the queue, ready for processing. Titan may return &lt;=n jobs. Consumers should start processing jobs in order. Each returned job is set to `status` \&quot;running\&quot; and `started_at` is set to the current time. No other consumer can retrieve this job.
+ * @param n Number of jobs to return.
  * @return JobsWrapper
  */
 //func (a JobsApi) JobsGet (n int32) (JobsWrapper, error) {
@@ -667,66 +742,6 @@ func (a JobsApi) JobsGet (n int32) (JobsWrapper, error) {
         break // only use the first Accept
     }
 
-
-  var successPayload = new(JobsWrapper)
-
-  // We use this map (below) so that any arbitrary error JSON can be handled.
-  // FIXME: This is in the absence of this Go generator honoring the non-2xx
-  // response (error) models, which needs to be implemented at some point.
-  var failurePayload map[string]interface{}
-
-  httpResponse, err := _sling.Receive(successPayload, &failurePayload)
-
-  if err == nil {
-    // err == nil only means that there wasn't a sub-application-layer error (e.g. no network error)
-    if failurePayload != nil {
-      // If the failurePayload is present, there likely was some kind of non-2xx status
-      // returned (and a JSON payload error present)
-      var str []byte
-      str, err = json.Marshal(failurePayload)
-      if err == nil { // For safety, check for an error marshalling... probably superfluous
-        // This will return the JSON error body as a string
-        err = errors.New(string(str))
-      }
-  } else {
-    // So, there was no network-type error, and nothing in the failure payload,
-    // but we should still check the status code
-    if httpResponse == nil {
-      // This should never happen...
-      err = errors.New("No HTTP Response received.")
-    } else if code := httpResponse.StatusCode; 200 > code || code > 299 {
-        err = errors.New("HTTP Error: " + string(httpResponse.StatusCode))
-      }
-    }
-  }
-
-  return *successPayload, err
-}
-/**
- * Enqueue Job
- * Enqueues job(s). If any of the jobs is invalid, none of the jobs are enqueued.
- * @param body Array of jobs to post.
- * @return JobsWrapper
- */
-//func (a JobsApi) JobsPost (body NewJobsWrapper) (JobsWrapper, error) {
-func (a JobsApi) JobsPost (body NewJobsWrapper) (JobsWrapper, error) {
-
-    _sling := sling.New().Post(a.basePath)
-
-    // create path and map variables
-    path := "/v1/jobs"
-
-    _sling = _sling.Path(path)
-
-    // accept header
-    accepts := []string { "application/json" }
-    for key := range accepts {
-        _sling = _sling.Set("Accept", accepts[key])
-        break // only use the first Accept
-    }
-
-// body params
-    _sling = _sling.BodyJSON(body)
 
   var successPayload = new(JobsWrapper)
 
