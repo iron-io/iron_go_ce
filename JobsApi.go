@@ -470,6 +470,70 @@ func (a JobsApi) GroupsGroupNameJobsIdLogPost (groupName string, id string, log 
   return *successPayload, err
 }
 /**
+ * Update a job
+ * Used to update status on job transitions. Eg: from &#39;running&#39; to &#39;success&#39;.
+ * @param groupName Name of group for this set of jobs.
+ * @param id Job id
+ * @param body Job data to post
+ * @return JobWrapper
+ */
+//func (a JobsApi) GroupsGroupNameJobsIdPatch (groupName string, id string, body JobWrapper) (JobWrapper, error) {
+func (a JobsApi) GroupsGroupNameJobsIdPatch (groupName string, id string, body JobWrapper) (JobWrapper, error) {
+
+    _sling := sling.New().Patch(a.basePath)
+
+    // create path and map variables
+    path := "/v1/groups/{group_name}/jobs/{id}"
+    path = strings.Replace(path, "{" + "group_name" + "}", fmt.Sprintf("%v", groupName), -1)
+    path = strings.Replace(path, "{" + "id" + "}", fmt.Sprintf("%v", id), -1)
+
+    _sling = _sling.Path(path)
+
+    // accept header
+    accepts := []string { "application/json" }
+    for key := range accepts {
+        _sling = _sling.Set("Accept", accepts[key])
+        break // only use the first Accept
+    }
+
+// body params
+    _sling = _sling.BodyJSON(body)
+
+  var successPayload = new(JobWrapper)
+
+  // We use this map (below) so that any arbitrary error JSON can be handled.
+  // FIXME: This is in the absence of this Go generator honoring the non-2xx
+  // response (error) models, which needs to be implemented at some point.
+  var failurePayload map[string]interface{}
+
+  httpResponse, err := _sling.Receive(successPayload, &failurePayload)
+
+  if err == nil {
+    // err == nil only means that there wasn't a sub-application-layer error (e.g. no network error)
+    if failurePayload != nil {
+      // If the failurePayload is present, there likely was some kind of non-2xx status
+      // returned (and a JSON payload error present)
+      var str []byte
+      str, err = json.Marshal(failurePayload)
+      if err == nil { // For safety, check for an error marshalling... probably superfluous
+        // This will return the JSON error body as a string
+        err = errors.New(string(str))
+      }
+  } else {
+    // So, there was no network-type error, and nothing in the failure payload,
+    // but we should still check the status code
+    if httpResponse == nil {
+      // This should never happen...
+      err = errors.New("No HTTP Response received.")
+    } else if code := httpResponse.StatusCode; 200 > code || code > 299 {
+        err = errors.New("HTTP Error: " + string(httpResponse.StatusCode))
+      }
+    }
+  }
+
+  return *successPayload, err
+}
+/**
  * Retry a job.
  * \&quot;The /retry endpoint can be used to force a retry of jobs\nwith status succeeded or cancelled. It can also be used to retry jobs\nthat in the failed state, but whose max_retries field is 0. The retried\njob will continue to have max_retries = 0.\&quot;\n
  * @param groupName Name of group for this set of jobs.
