@@ -9,18 +9,22 @@ import (
 )
 
 type GroupsApi struct {
-    basePath  string
+    Configuration Configuration
 }
 
 func NewGroupsApi() *GroupsApi{
+    configuration := NewConfiguration()
     return &GroupsApi {
-        basePath:   "https://localhost:8080/v1",
+        Configuration: *configuration,
     }
 }
 
 func NewGroupsApiWithBasePath(basePath string) *GroupsApi{
+    configuration := NewConfiguration()
+    configuration.BasePath = basePath
+    
     return &GroupsApi {
-        basePath:   basePath,
+        Configuration: *configuration,
     }
 }
 
@@ -32,7 +36,7 @@ func NewGroupsApiWithBasePath(basePath string) *GroupsApi{
 //func (a GroupsApi) GroupsGet () (GroupsWrapper, error) {
 func (a GroupsApi) GroupsGet () (GroupsWrapper, error) {
 
-    _sling := sling.New().Get(a.basePath)
+    _sling := sling.New().Get(a.Configuration.BasePath)
 
     // create path and map variables
     path := "/v1/groups"
@@ -90,7 +94,7 @@ func (a GroupsApi) GroupsGet () (GroupsWrapper, error) {
 //func (a GroupsApi) GroupsNameGet (name string) (GroupWrapper, error) {
 func (a GroupsApi) GroupsNameGet (name string) (GroupWrapper, error) {
 
-    _sling := sling.New().Get(a.basePath)
+    _sling := sling.New().Get(a.Configuration.BasePath)
 
     // create path and map variables
     path := "/v1/groups/{name}"

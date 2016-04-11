@@ -4,5 +4,4 @@ import (
 )
 
 type Reason struct {
-    
-}
+    }
