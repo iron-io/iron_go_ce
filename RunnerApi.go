@@ -9,37 +9,33 @@ import (
 )
 
 type RunnerApi struct {
-    Configuration Configuration
+    basePath  string
 }
 
 func NewRunnerApi() *RunnerApi{
-    configuration := NewConfiguration()
     return &RunnerApi {
-        Configuration: *configuration,
+        basePath:   "https://localhost:8080/v1",
     }
 }
 
 func NewRunnerApiWithBasePath(basePath string) *RunnerApi{
-    configuration := NewConfiguration()
-    configuration.BasePath = basePath
-    
     return &RunnerApi {
-        Configuration: *configuration,
+        basePath:   basePath,
     }
 }
 
 /**
  * Mark job as failed.
- * Job is marked as failed if it was in a valid state. Job&#39;s &#x60;finished_at&#x60; time is initialized.
+ * Job is marked as failed if it was in a valid state. Job&#39;s `finished_at` time is initialized.
  * @param groupName Name of group for this set of jobs.
  * @param id Job id
- * @param reason Reason for job failure.
+ * @param body 
  * @return JobWrapper
  */
-//func (a RunnerApi) GroupsGroupNameJobsIdErrorPost (groupName string, id string, reason string) (JobWrapper, error) {
-func (a RunnerApi) GroupsGroupNameJobsIdErrorPost (groupName string, id string, reason string) (JobWrapper, error) {
+//func (a RunnerApi) GroupsGroupNameJobsIdErrorPost (groupName string, id string, body Complete) (JobWrapper, error) {
+func (a RunnerApi) GroupsGroupNameJobsIdErrorPost (groupName string, id string, body Complete) (JobWrapper, error) {
 
-    _sling := sling.New().Post(a.Configuration.BasePath)
+    _sling := sling.New().Post(a.basePath)
 
     // create path and map variables
     path := "/v1/groups/{group_name}/jobs/{id}/error"
@@ -55,10 +51,8 @@ func (a RunnerApi) GroupsGroupNameJobsIdErrorPost (groupName string, id string, 
         break // only use the first Accept
     }
 
-    type FormParams struct {
-        reason    string `url:"reason,omitempty"`
-    }
-    _sling = _sling.BodyForm(&FormParams{ reason: reason })
+// body params
+    _sling = _sling.BodyJSON(body)
 
   var successPayload = new(JobWrapper)
 
@@ -95,8 +89,8 @@ func (a RunnerApi) GroupsGroupNameJobsIdErrorPost (groupName string, id string, 
   return *successPayload, err
 }
 /**
- * Mark job as started, ie: status &#x3D; &#39;running&#39;
- * Job status is changed to &#39;running&#39; if it was in a valid state before. Job&#39;s &#x60;started_at&#x60; time is initialized.
+ * Mark job as started, ie: status = &#39;running&#39;
+ * Job status is changed to &#39;running&#39; if it was in a valid state before. Job&#39;s `started_at` time is initialized.
  * @param groupName Name of group for this set of jobs.
  * @param id Job id
  * @param body 
@@ -105,7 +99,7 @@ func (a RunnerApi) GroupsGroupNameJobsIdErrorPost (groupName string, id string, 
 //func (a RunnerApi) GroupsGroupNameJobsIdStartPost (groupName string, id string, body Start) (JobWrapper, error) {
 func (a RunnerApi) GroupsGroupNameJobsIdStartPost (groupName string, id string, body Start) (JobWrapper, error) {
 
-    _sling := sling.New().Post(a.Configuration.BasePath)
+    _sling := sling.New().Post(a.basePath)
 
     // create path and map variables
     path := "/v1/groups/{group_name}/jobs/{id}/start"
@@ -160,15 +154,16 @@ func (a RunnerApi) GroupsGroupNameJobsIdStartPost (groupName string, id string, 
 }
 /**
  * Mark job as succeeded.
- * Job status is changed to succeeded if it was in a valid state before. Job&#39;s &#x60;completed_at&#x60; time is initialized.
+ * Job status is changed to succeeded if it was in a valid state before. Job&#39;s `completed_at` time is initialized.
  * @param groupName Name of group for this set of jobs.
  * @param id Job id
+ * @param body 
  * @return JobWrapper
  */
-//func (a RunnerApi) GroupsGroupNameJobsIdSuccessPost (groupName string, id string) (JobWrapper, error) {
-func (a RunnerApi) GroupsGroupNameJobsIdSuccessPost (groupName string, id string) (JobWrapper, error) {
+//func (a RunnerApi) GroupsGroupNameJobsIdSuccessPost (groupName string, id string, body Complete) (JobWrapper, error) {
+func (a RunnerApi) GroupsGroupNameJobsIdSuccessPost (groupName string, id string, body Complete) (JobWrapper, error) {
 
-    _sling := sling.New().Post(a.Configuration.BasePath)
+    _sling := sling.New().Post(a.basePath)
 
     // create path and map variables
     path := "/v1/groups/{group_name}/jobs/{id}/success"
@@ -184,6 +179,8 @@ func (a RunnerApi) GroupsGroupNameJobsIdSuccessPost (groupName string, id string
         break // only use the first Accept
     }
 
+// body params
+    _sling = _sling.BodyJSON(body)
 
   var successPayload = new(JobWrapper)
 

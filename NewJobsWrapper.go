@@ -5,4 +5,5 @@ import (
 
 type NewJobsWrapper struct {
     Jobs  []NewJob  `json:"jobs,omitempty"`
+    
 }
