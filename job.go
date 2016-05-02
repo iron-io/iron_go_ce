@@ -14,7 +14,7 @@ type Job struct {
     RetriesDelay  int32  `json:"retries_delay,omitempty"`
     Id  string  `json:"id,omitempty"`
     Status  string  `json:"status,omitempty"`
-    GroupName  string  `json:"group_name,omitempty"`
+    Name  string  `json:"name,omitempty"`
     Error_  string  `json:"error,omitempty"`
     Reason  string  `json:"reason,omitempty"`
     CreatedAt  time.Time  `json:"created_at,omitempty"`

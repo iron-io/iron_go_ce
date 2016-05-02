@@ -29,19 +29,19 @@ func NewJobsApiWithBasePath(basePath string) *JobsApi{
 /**
  * Get job list by group name.
  * This will list jobs for a particular group.
- * @param groupName Name of group for this set of jobs.
+ * @param name Name of group for this set of jobs.
  * @param createdAfter Will return jobs created after this time. In RFC3339 format.
  * @param n Number of jobs to return.
  * @return JobsWrapper
  */
-//func (a JobsApi) GroupsGroupNameJobsGet (groupName string, createdAfter time.Time, n int32) (JobsWrapper, error) {
-func (a JobsApi) GroupsGroupNameJobsGet (groupName string, createdAfter time.Time, n int32) (JobsWrapper, error) {
+//func (a JobsApi) GroupsNameJobsGet (name string, createdAfter time.Time, n int32) (JobsWrapper, error) {
+func (a JobsApi) GroupsNameJobsGet (name string, createdAfter time.Time, n int32) (JobsWrapper, error) {
 
     _sling := sling.New().Get(a.basePath)
 
     // create path and map variables
-    path := "/v1/groups/{group_name}/jobs"
-    path = strings.Replace(path, "{" + "group_name" + "}", fmt.Sprintf("%v", groupName), -1)
+    path := "/v1/groups/{name}/jobs"
+    path = strings.Replace(path, "{" + "name" + "}", fmt.Sprintf("%v", name), -1)
 
     _sling = _sling.Path(path)
 
@@ -96,18 +96,18 @@ func (a JobsApi) GroupsGroupNameJobsGet (groupName string, createdAfter time.Tim
 /**
  * Cancel a job.
  * Cancels a job in delayed, queued or running status. The worker may continue to run a running job. reason is set to `client_request`. The job&#39;s completed_at field is set to the current time on the jobserver.
- * @param groupName Name of group for this set of jobs.
+ * @param name Name of group for this set of jobs.
  * @param id Job id
  * @return JobWrapper
  */
-//func (a JobsApi) GroupsGroupNameJobsIdCancelPost (groupName string, id string) (JobWrapper, error) {
-func (a JobsApi) GroupsGroupNameJobsIdCancelPost (groupName string, id string) (JobWrapper, error) {
+//func (a JobsApi) GroupsNameJobsIdCancelPost (name string, id string) (JobWrapper, error) {
+func (a JobsApi) GroupsNameJobsIdCancelPost (name string, id string) (JobWrapper, error) {
 
     _sling := sling.New().Post(a.basePath)
 
     // create path and map variables
-    path := "/v1/groups/{group_name}/jobs/{id}/cancel"
-    path = strings.Replace(path, "{" + "group_name" + "}", fmt.Sprintf("%v", groupName), -1)
+    path := "/v1/groups/{name}/jobs/{id}/cancel"
+    path = strings.Replace(path, "{" + "name" + "}", fmt.Sprintf("%v", name), -1)
     path = strings.Replace(path, "{" + "id" + "}", fmt.Sprintf("%v", id), -1)
 
     _sling = _sling.Path(path)
@@ -157,18 +157,18 @@ func (a JobsApi) GroupsGroupNameJobsIdCancelPost (groupName string, id string) (
 /**
  * Delete the job.
  * Delete only succeeds if job status is one of `succeeded\n| failed | cancelled`. Cancel a job if it is another state and needs to\nbe deleted.  All information about the job, including the log, is\nirretrievably lost when this is invoked.\n
- * @param groupName Name of group for this set of jobs.
+ * @param name Name of group for this set of jobs.
  * @param id Job id
  * @return void
  */
-//func (a JobsApi) GroupsGroupNameJobsIdDelete (groupName string, id string) (error) {
-func (a JobsApi) GroupsGroupNameJobsIdDelete (groupName string, id string) (error) {
+//func (a JobsApi) GroupsNameJobsIdDelete (name string, id string) (error) {
+func (a JobsApi) GroupsNameJobsIdDelete (name string, id string) (error) {
 
     _sling := sling.New().Delete(a.basePath)
 
     // create path and map variables
-    path := "/v1/groups/{group_name}/jobs/{id}"
-    path = strings.Replace(path, "{" + "group_name" + "}", fmt.Sprintf("%v", groupName), -1)
+    path := "/v1/groups/{name}/jobs/{id}"
+    path = strings.Replace(path, "{" + "name" + "}", fmt.Sprintf("%v", name), -1)
     path = strings.Replace(path, "{" + "id" + "}", fmt.Sprintf("%v", id), -1)
 
     _sling = _sling.Path(path)
@@ -218,19 +218,19 @@ func (a JobsApi) GroupsGroupNameJobsIdDelete (groupName string, id string) (erro
 /**
  * Mark job as failed.
  * Job is marked as failed if it was in a valid state. Job&#39;s `finished_at` time is initialized.
- * @param groupName Name of group for this set of jobs.
+ * @param name Name of group for this set of jobs.
  * @param id Job id
  * @param body 
  * @return JobWrapper
  */
-//func (a JobsApi) GroupsGroupNameJobsIdErrorPost (groupName string, id string, body Complete) (JobWrapper, error) {
-func (a JobsApi) GroupsGroupNameJobsIdErrorPost (groupName string, id string, body Complete) (JobWrapper, error) {
+//func (a JobsApi) GroupsNameJobsIdErrorPost (name string, id string, body Complete) (JobWrapper, error) {
+func (a JobsApi) GroupsNameJobsIdErrorPost (name string, id string, body Complete) (JobWrapper, error) {
 
     _sling := sling.New().Post(a.basePath)
 
     // create path and map variables
-    path := "/v1/groups/{group_name}/jobs/{id}/error"
-    path = strings.Replace(path, "{" + "group_name" + "}", fmt.Sprintf("%v", groupName), -1)
+    path := "/v1/groups/{name}/jobs/{id}/error"
+    path = strings.Replace(path, "{" + "name" + "}", fmt.Sprintf("%v", name), -1)
     path = strings.Replace(path, "{" + "id" + "}", fmt.Sprintf("%v", id), -1)
 
     _sling = _sling.Path(path)
@@ -282,18 +282,18 @@ func (a JobsApi) GroupsGroupNameJobsIdErrorPost (groupName string, id string, bo
 /**
  * Gets job by id
  * Gets a job by id.
- * @param groupName Name of group for this set of jobs.
+ * @param name Name of group for this set of jobs.
  * @param id Job id
  * @return JobWrapper
  */
-//func (a JobsApi) GroupsGroupNameJobsIdGet (groupName string, id string) (JobWrapper, error) {
-func (a JobsApi) GroupsGroupNameJobsIdGet (groupName string, id string) (JobWrapper, error) {
+//func (a JobsApi) GroupsNameJobsIdGet (name string, id string) (JobWrapper, error) {
+func (a JobsApi) GroupsNameJobsIdGet (name string, id string) (JobWrapper, error) {
 
     _sling := sling.New().Get(a.basePath)
 
     // create path and map variables
-    path := "/v1/groups/{group_name}/jobs/{id}"
-    path = strings.Replace(path, "{" + "group_name" + "}", fmt.Sprintf("%v", groupName), -1)
+    path := "/v1/groups/{name}/jobs/{id}"
+    path = strings.Replace(path, "{" + "name" + "}", fmt.Sprintf("%v", name), -1)
     path = strings.Replace(path, "{" + "id" + "}", fmt.Sprintf("%v", id), -1)
 
     _sling = _sling.Path(path)
@@ -343,18 +343,18 @@ func (a JobsApi) GroupsGroupNameJobsIdGet (groupName string, id string) (JobWrap
 /**
  * Get the log of a completed job.
  * Retrieves the log from log storage.
- * @param groupName Name of group for this set of jobs.
+ * @param name Name of group for this set of jobs.
  * @param id Job id
  * @return string
  */
-//func (a JobsApi) GroupsGroupNameJobsIdLogGet (groupName string, id string) (string, error) {
-func (a JobsApi) GroupsGroupNameJobsIdLogGet (groupName string, id string) (string, error) {
+//func (a JobsApi) GroupsNameJobsIdLogGet (name string, id string) (string, error) {
+func (a JobsApi) GroupsNameJobsIdLogGet (name string, id string) (string, error) {
 
     _sling := sling.New().Get(a.basePath)
 
     // create path and map variables
-    path := "/v1/groups/{group_name}/jobs/{id}/log"
-    path = strings.Replace(path, "{" + "group_name" + "}", fmt.Sprintf("%v", groupName), -1)
+    path := "/v1/groups/{name}/jobs/{id}/log"
+    path = strings.Replace(path, "{" + "name" + "}", fmt.Sprintf("%v", name), -1)
     path = strings.Replace(path, "{" + "id" + "}", fmt.Sprintf("%v", id), -1)
 
     _sling = _sling.Path(path)
@@ -404,19 +404,19 @@ func (a JobsApi) GroupsGroupNameJobsIdLogGet (groupName string, id string) (stri
 /**
  * Send in a log for storage.
  * Logs are sent after a job completes since they may be very large and the runner can process the next job.
- * @param groupName Name of group for this set of jobs.
+ * @param name Name of group for this set of jobs.
  * @param id Job id
  * @param log Output log for the job. Content-Type must be \&quot;text/plain; charset=utf-8\&quot;.
  * @return JobWrapper
  */
-//func (a JobsApi) GroupsGroupNameJobsIdLogPost (groupName string, id string, log *os.File) (JobWrapper, error) {
-func (a JobsApi) GroupsGroupNameJobsIdLogPost (groupName string, id string, log *os.File) (JobWrapper, error) {
+//func (a JobsApi) GroupsNameJobsIdLogPost (name string, id string, log *os.File) (JobWrapper, error) {
+func (a JobsApi) GroupsNameJobsIdLogPost (name string, id string, log *os.File) (JobWrapper, error) {
 
     _sling := sling.New().Post(a.basePath)
 
     // create path and map variables
-    path := "/v1/groups/{group_name}/jobs/{id}/log"
-    path = strings.Replace(path, "{" + "group_name" + "}", fmt.Sprintf("%v", groupName), -1)
+    path := "/v1/groups/{name}/jobs/{id}/log"
+    path = strings.Replace(path, "{" + "name" + "}", fmt.Sprintf("%v", name), -1)
     path = strings.Replace(path, "{" + "id" + "}", fmt.Sprintf("%v", id), -1)
 
     _sling = _sling.Path(path)
@@ -470,18 +470,18 @@ func (a JobsApi) GroupsGroupNameJobsIdLogPost (groupName string, id string, log 
 /**
  * Retry a job.
  * \&quot;The /retry endpoint can be used to force a retry of jobs\nwith status succeeded or cancelled. It can also be used to retry jobs\nthat in the failed state, but whose max_retries field is 0. The retried\njob will continue to have max_retries = 0.\&quot;\n
- * @param groupName Name of group for this set of jobs.
+ * @param name Name of group for this set of jobs.
  * @param id Job id
  * @return JobWrapper
  */
-//func (a JobsApi) GroupsGroupNameJobsIdRetryPost (groupName string, id string) (JobWrapper, error) {
-func (a JobsApi) GroupsGroupNameJobsIdRetryPost (groupName string, id string) (JobWrapper, error) {
+//func (a JobsApi) GroupsNameJobsIdRetryPost (name string, id string) (JobWrapper, error) {
+func (a JobsApi) GroupsNameJobsIdRetryPost (name string, id string) (JobWrapper, error) {
 
     _sling := sling.New().Post(a.basePath)
 
     // create path and map variables
-    path := "/v1/groups/{group_name}/jobs/{id}/retry"
-    path = strings.Replace(path, "{" + "group_name" + "}", fmt.Sprintf("%v", groupName), -1)
+    path := "/v1/groups/{name}/jobs/{id}/retry"
+    path = strings.Replace(path, "{" + "name" + "}", fmt.Sprintf("%v", name), -1)
     path = strings.Replace(path, "{" + "id" + "}", fmt.Sprintf("%v", id), -1)
 
     _sling = _sling.Path(path)
@@ -531,19 +531,19 @@ func (a JobsApi) GroupsGroupNameJobsIdRetryPost (groupName string, id string) (J
 /**
  * Mark job as started, ie: status = &#39;running&#39;
  * Job status is changed to &#39;running&#39; if it was in a valid state before. Job&#39;s `started_at` time is initialized.
- * @param groupName Name of group for this set of jobs.
+ * @param name Name of group for this set of jobs.
  * @param id Job id
  * @param body 
  * @return JobWrapper
  */
-//func (a JobsApi) GroupsGroupNameJobsIdStartPost (groupName string, id string, body Start) (JobWrapper, error) {
-func (a JobsApi) GroupsGroupNameJobsIdStartPost (groupName string, id string, body Start) (JobWrapper, error) {
+//func (a JobsApi) GroupsNameJobsIdStartPost (name string, id string, body Start) (JobWrapper, error) {
+func (a JobsApi) GroupsNameJobsIdStartPost (name string, id string, body Start) (JobWrapper, error) {
 
     _sling := sling.New().Post(a.basePath)
 
     // create path and map variables
-    path := "/v1/groups/{group_name}/jobs/{id}/start"
-    path = strings.Replace(path, "{" + "group_name" + "}", fmt.Sprintf("%v", groupName), -1)
+    path := "/v1/groups/{name}/jobs/{id}/start"
+    path = strings.Replace(path, "{" + "name" + "}", fmt.Sprintf("%v", name), -1)
     path = strings.Replace(path, "{" + "id" + "}", fmt.Sprintf("%v", id), -1)
 
     _sling = _sling.Path(path)
@@ -595,19 +595,19 @@ func (a JobsApi) GroupsGroupNameJobsIdStartPost (groupName string, id string, bo
 /**
  * Mark job as succeeded.
  * Job status is changed to succeeded if it was in a valid state before. Job&#39;s `completed_at` time is initialized.
- * @param groupName Name of group for this set of jobs.
+ * @param name Name of group for this set of jobs.
  * @param id Job id
  * @param body 
  * @return JobWrapper
  */
-//func (a JobsApi) GroupsGroupNameJobsIdSuccessPost (groupName string, id string, body Complete) (JobWrapper, error) {
-func (a JobsApi) GroupsGroupNameJobsIdSuccessPost (groupName string, id string, body Complete) (JobWrapper, error) {
+//func (a JobsApi) GroupsNameJobsIdSuccessPost (name string, id string, body Complete) (JobWrapper, error) {
+func (a JobsApi) GroupsNameJobsIdSuccessPost (name string, id string, body Complete) (JobWrapper, error) {
 
     _sling := sling.New().Post(a.basePath)
 
     // create path and map variables
-    path := "/v1/groups/{group_name}/jobs/{id}/success"
-    path = strings.Replace(path, "{" + "group_name" + "}", fmt.Sprintf("%v", groupName), -1)
+    path := "/v1/groups/{name}/jobs/{id}/success"
+    path = strings.Replace(path, "{" + "name" + "}", fmt.Sprintf("%v", name), -1)
     path = strings.Replace(path, "{" + "id" + "}", fmt.Sprintf("%v", id), -1)
 
     _sling = _sling.Path(path)
@@ -659,18 +659,18 @@ func (a JobsApi) GroupsGroupNameJobsIdSuccessPost (groupName string, id string, 
 /**
  * Extend job timeout.
  * Consumers can sometimes take a while to run the task after accepting it.  An example is when the runner does not have the docker image locally, it can spend a significant time downloading the image.\nIf the timeout is small, the job may never get to run, or run but not be accepted by Titan. Consumers can touch the job before it times out. Titan will reset the timeout, giving the consumer another timeout seconds to run the job.\nTouch is only valid while the job is in a running state. If touch fails, the runner may stop running the job.\n
- * @param groupName Name of group for this set of jobs.
+ * @param name Name of group for this set of jobs.
  * @param id Job id
  * @return void
  */
-//func (a JobsApi) GroupsGroupNameJobsIdTouchPost (groupName string, id string) (error) {
-func (a JobsApi) GroupsGroupNameJobsIdTouchPost (groupName string, id string) (error) {
+//func (a JobsApi) GroupsNameJobsIdTouchPost (name string, id string) (error) {
+func (a JobsApi) GroupsNameJobsIdTouchPost (name string, id string) (error) {
 
     _sling := sling.New().Post(a.basePath)
 
     // create path and map variables
-    path := "/v1/groups/{group_name}/jobs/{id}/touch"
-    path = strings.Replace(path, "{" + "group_name" + "}", fmt.Sprintf("%v", groupName), -1)
+    path := "/v1/groups/{name}/jobs/{id}/touch"
+    path = strings.Replace(path, "{" + "name" + "}", fmt.Sprintf("%v", name), -1)
     path = strings.Replace(path, "{" + "id" + "}", fmt.Sprintf("%v", id), -1)
 
     _sling = _sling.Path(path)
@@ -720,18 +720,18 @@ func (a JobsApi) GroupsGroupNameJobsIdTouchPost (groupName string, id string) (e
 /**
  * Enqueue Job
  * Enqueues job(s). If any of the jobs is invalid, none of the jobs are enqueued.\n
- * @param groupName name of the group.
+ * @param name name of the group.
  * @param body Array of jobs to post.
  * @return JobsWrapper
  */
-//func (a JobsApi) GroupsGroupNameJobsPost (groupName string, body NewJobsWrapper) (JobsWrapper, error) {
-func (a JobsApi) GroupsGroupNameJobsPost (groupName string, body NewJobsWrapper) (JobsWrapper, error) {
+//func (a JobsApi) GroupsNameJobsPost (name string, body NewJobsWrapper) (JobsWrapper, error) {
+func (a JobsApi) GroupsNameJobsPost (name string, body NewJobsWrapper) (JobsWrapper, error) {
 
     _sling := sling.New().Post(a.basePath)
 
     // create path and map variables
-    path := "/v1/groups/{group_name}/jobs"
-    path = strings.Replace(path, "{" + "group_name" + "}", fmt.Sprintf("%v", groupName), -1)
+    path := "/v1/groups/{name}/jobs"
+    path = strings.Replace(path, "{" + "name" + "}", fmt.Sprintf("%v", name), -1)
 
     _sling = _sling.Path(path)
 
