@@ -23,23 +23,22 @@
 package titan
 
 import (
-	"time"
+	"net/http"
 )
 
-type Group struct {
+type APIResponse struct {
+	*http.Response
+	Message string `json:"message,omitempty"`
+}
 
-	// Name of this group. Must be different than the image name. Can ony contain alphanumeric, -, and _.
-	Name string `json:"name,omitempty"`
+func NewAPIResponse(r *http.Response) *APIResponse {
 
-	// Time when image first used/created.
-	CreatedAt time.Time `json:"created_at,omitempty"`
+	response := &APIResponse{Response: r}
+	return response
+}
 
-	// Name of Docker image to use in this group. You should include the image tag, which should be a version number, to be more accurate. Can be overridden on a per job basis with job.image.
-	Image string `json:"image,omitempty"`
+func NewAPIResponseWithError(errorMessage string) *APIResponse {
 
-	// User defined environment variables that will be passed in to each job in this group.
-	EnvVars map[string]string `json:"env_vars,omitempty"`
-
-	// The maximum number of jobs that will run at the exact same time in this group.
-	MaxConcurrency int32 `json:"max_concurrency,omitempty"`
+	response := &APIResponse{Message: errorMessage}
+	return response
 }

@@ -22,18 +22,7 @@
 
 package titan
 
-import (
-	"time"
-)
+type ModelError struct {
 
-type Complete struct {
-
-	// Time when job was completed. Always in UTC.
-	CompletedAt time.Time `json:"completed_at,omitempty"`
-
-	// Machine readable reason failure, if status=error. Only used by the /error endpoint.
-	Reason string `json:"reason,omitempty"`
-
-	// Error message, if status=error. Only used by the /error endpoint.
-	Error_ string `json:"error,omitempty"`
+	Error_ ErrorBody `json:"error,omitempty"`
 }

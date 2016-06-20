@@ -22,24 +22,9 @@
 
 package titan
 
-import (
-	"time"
-)
+type JobsWrapper struct {
 
-type Group struct {
+	Jobs []Job `json:"jobs,omitempty"`
 
-	// Name of this group. Must be different than the image name. Can ony contain alphanumeric, -, and _.
-	Name string `json:"name,omitempty"`
-
-	// Time when image first used/created.
-	CreatedAt time.Time `json:"created_at,omitempty"`
-
-	// Name of Docker image to use in this group. You should include the image tag, which should be a version number, to be more accurate. Can be overridden on a per job basis with job.image.
-	Image string `json:"image,omitempty"`
-
-	// User defined environment variables that will be passed in to each job in this group.
-	EnvVars map[string]string `json:"env_vars,omitempty"`
-
-	// The maximum number of jobs that will run at the exact same time in this group.
-	MaxConcurrency int32 `json:"max_concurrency,omitempty"`
+	Error_ ErrorBody `json:"error,omitempty"`
 }

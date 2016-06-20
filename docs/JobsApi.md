@@ -4,23 +4,23 @@ All URIs are relative to *https://localhost:8080/v1*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
-[**GroupsGroupNameJobsGet**](JobsApi.md#GroupsGroupNameJobsGet) | **Get** /groups/{group_name}/jobs | Get job list by group name.
-[**GroupsGroupNameJobsIdCancelPost**](JobsApi.md#GroupsGroupNameJobsIdCancelPost) | **Post** /groups/{group_name}/jobs/{id}/cancel | Cancel a job.
-[**GroupsGroupNameJobsIdDelete**](JobsApi.md#GroupsGroupNameJobsIdDelete) | **Delete** /groups/{group_name}/jobs/{id} | Delete the job.
-[**GroupsGroupNameJobsIdErrorPost**](JobsApi.md#GroupsGroupNameJobsIdErrorPost) | **Post** /groups/{group_name}/jobs/{id}/error | Mark job as failed.
-[**GroupsGroupNameJobsIdGet**](JobsApi.md#GroupsGroupNameJobsIdGet) | **Get** /groups/{group_name}/jobs/{id} | Gets job by id
-[**GroupsGroupNameJobsIdLogGet**](JobsApi.md#GroupsGroupNameJobsIdLogGet) | **Get** /groups/{group_name}/jobs/{id}/log | Get the log of a completed job.
-[**GroupsGroupNameJobsIdLogPost**](JobsApi.md#GroupsGroupNameJobsIdLogPost) | **Post** /groups/{group_name}/jobs/{id}/log | Send in a log for storage.
-[**GroupsGroupNameJobsIdRetryPost**](JobsApi.md#GroupsGroupNameJobsIdRetryPost) | **Post** /groups/{group_name}/jobs/{id}/retry | Retry a job.
-[**GroupsGroupNameJobsIdStartPost**](JobsApi.md#GroupsGroupNameJobsIdStartPost) | **Post** /groups/{group_name}/jobs/{id}/start | Mark job as started, ie: status &#x3D; &#39;running&#39;
-[**GroupsGroupNameJobsIdSuccessPost**](JobsApi.md#GroupsGroupNameJobsIdSuccessPost) | **Post** /groups/{group_name}/jobs/{id}/success | Mark job as succeeded.
-[**GroupsGroupNameJobsIdTouchPost**](JobsApi.md#GroupsGroupNameJobsIdTouchPost) | **Post** /groups/{group_name}/jobs/{id}/touch | Extend job timeout.
-[**GroupsGroupNameJobsPost**](JobsApi.md#GroupsGroupNameJobsPost) | **Post** /groups/{group_name}/jobs | Enqueue Job
+[**GroupsNameJobsGet**](JobsApi.md#GroupsNameJobsGet) | **Get** /groups/{name}/jobs | Get job list by group name.
+[**GroupsNameJobsIdCancelPost**](JobsApi.md#GroupsNameJobsIdCancelPost) | **Post** /groups/{name}/jobs/{id}/cancel | Cancel a job.
+[**GroupsNameJobsIdDelete**](JobsApi.md#GroupsNameJobsIdDelete) | **Delete** /groups/{name}/jobs/{id} | Delete the job.
+[**GroupsNameJobsIdErrorPost**](JobsApi.md#GroupsNameJobsIdErrorPost) | **Post** /groups/{name}/jobs/{id}/error | Mark job as failed.
+[**GroupsNameJobsIdGet**](JobsApi.md#GroupsNameJobsIdGet) | **Get** /groups/{name}/jobs/{id} | Gets job by id
+[**GroupsNameJobsIdLogGet**](JobsApi.md#GroupsNameJobsIdLogGet) | **Get** /groups/{name}/jobs/{id}/log | Get the log of a completed job.
+[**GroupsNameJobsIdLogPost**](JobsApi.md#GroupsNameJobsIdLogPost) | **Post** /groups/{name}/jobs/{id}/log | Send in a log for storage.
+[**GroupsNameJobsIdRetryPost**](JobsApi.md#GroupsNameJobsIdRetryPost) | **Post** /groups/{name}/jobs/{id}/retry | Retry a job.
+[**GroupsNameJobsIdStartPost**](JobsApi.md#GroupsNameJobsIdStartPost) | **Post** /groups/{name}/jobs/{id}/start | Mark job as started, ie: status &#x3D; &#39;running&#39;
+[**GroupsNameJobsIdSuccessPost**](JobsApi.md#GroupsNameJobsIdSuccessPost) | **Post** /groups/{name}/jobs/{id}/success | Mark job as succeeded.
+[**GroupsNameJobsIdTouchPost**](JobsApi.md#GroupsNameJobsIdTouchPost) | **Post** /groups/{name}/jobs/{id}/touch | Extend job timeout.
+[**GroupsNameJobsPost**](JobsApi.md#GroupsNameJobsPost) | **Post** /groups/{name}/jobs | Enqueue Job
 [**JobsGet**](JobsApi.md#JobsGet) | **Get** /jobs | Get next job.
 
 
-# **GroupsGroupNameJobsGet**
-> JobsWrapper GroupsGroupNameJobsGet($groupName, $createdAfter, $n)
+# **GroupsNameJobsGet**
+> JobsWrapper GroupsNameJobsGet($name, $createdAfter, $n)
 
 Get job list by group name.
 
@@ -31,7 +31,7 @@ This will list jobs for a particular group.
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **groupName** | **string**| Name of group for this set of jobs. | 
+ **name** | **string**| Name of group for this set of jobs. | 
  **createdAfter** | **time.Time**| Will return jobs created after this time. In RFC3339 format. | [optional] 
  **n** | **int32**| Number of jobs to return. | [optional] 
 
@@ -50,19 +50,19 @@ No authorization required
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
-# **GroupsGroupNameJobsIdCancelPost**
-> JobWrapper GroupsGroupNameJobsIdCancelPost($groupName, $id)
+# **GroupsNameJobsIdCancelPost**
+> JobWrapper GroupsNameJobsIdCancelPost($name, $id)
 
 Cancel a job.
 
-Cancels a job in delayed, queued or running status. The worker may continue to run a running job. reason is set to `client_request`.
+Cancels a job in delayed, queued or running status. The worker may continue to run a running job. reason is set to `client_request`. The job's completed_at field is set to the current time on the jobserver.
 
 
 ### Parameters
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **groupName** | **string**| Name of group for this set of jobs. | 
+ **name** | **string**| Name of group for this set of jobs. | 
  **id** | **string**| Job id | 
 
 ### Return type
@@ -80,19 +80,19 @@ No authorization required
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
-# **GroupsGroupNameJobsIdDelete**
-> GroupsGroupNameJobsIdDelete($groupName, $id)
+# **GroupsNameJobsIdDelete**
+> GroupsNameJobsIdDelete($name, $id)
 
 Delete the job.
 
-Delete only succeeds if job status is one of `succeeded\n| failed | cancelled`. Cancel a job if it is another state and needs to\nbe deleted.  All information about the job, including the log, is\nirretrievably lost when this is invoked.\n
+Delete only succeeds if job status is one of `succeeded | failed | cancelled`. Cancel a job if it is another state and needs to be deleted.  All information about the job, including the log, is irretrievably lost when this is invoked. 
 
 
 ### Parameters
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **groupName** | **string**| Name of group for this set of jobs. | 
+ **name** | **string**| Name of group for this set of jobs. | 
  **id** | **string**| Job id | 
 
 ### Return type
@@ -110,8 +110,8 @@ No authorization required
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
-# **GroupsGroupNameJobsIdErrorPost**
-> JobWrapper GroupsGroupNameJobsIdErrorPost($groupName, $id, $reason)
+# **GroupsNameJobsIdErrorPost**
+> JobWrapper GroupsNameJobsIdErrorPost($name, $id, $body)
 
 Mark job as failed.
 
@@ -122,9 +122,9 @@ Job is marked as failed if it was in a valid state. Job's `finished_at` time is 
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **groupName** | **string**| Name of group for this set of jobs. | 
+ **name** | **string**| Name of group for this set of jobs. | 
  **id** | **string**| Job id | 
- **reason** | **string**| Reason for job failure. | 
+ **body** | [**Complete**](Complete.md)|  | 
 
 ### Return type
 
@@ -141,8 +141,8 @@ No authorization required
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
-# **GroupsGroupNameJobsIdGet**
-> JobWrapper GroupsGroupNameJobsIdGet($groupName, $id)
+# **GroupsNameJobsIdGet**
+> JobWrapper GroupsNameJobsIdGet($name, $id)
 
 Gets job by id
 
@@ -153,7 +153,7 @@ Gets a job by id.
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **groupName** | **string**| Name of group for this set of jobs. | 
+ **name** | **string**| Name of group for this set of jobs. | 
  **id** | **string**| Job id | 
 
 ### Return type
@@ -171,8 +171,8 @@ No authorization required
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
-# **GroupsGroupNameJobsIdLogGet**
-> string GroupsGroupNameJobsIdLogGet($groupName, $id)
+# **GroupsNameJobsIdLogGet**
+> string GroupsNameJobsIdLogGet($name, $id)
 
 Get the log of a completed job.
 
@@ -183,7 +183,7 @@ Retrieves the log from log storage.
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **groupName** | **string**| Name of group for this set of jobs. | 
+ **name** | **string**| Name of group for this set of jobs. | 
  **id** | **string**| Job id | 
 
 ### Return type
@@ -201,8 +201,8 @@ No authorization required
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
-# **GroupsGroupNameJobsIdLogPost**
-> JobWrapper GroupsGroupNameJobsIdLogPost($groupName, $id, $log)
+# **GroupsNameJobsIdLogPost**
+> JobWrapper GroupsNameJobsIdLogPost($name, $id, $log)
 
 Send in a log for storage.
 
@@ -213,7 +213,7 @@ Logs are sent after a job completes since they may be very large and the runner 
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **groupName** | **string**| Name of group for this set of jobs. | 
+ **name** | **string**| Name of group for this set of jobs. | 
  **id** | **string**| Job id | 
  **log** | ***os.File**| Output log for the job. Content-Type must be \&quot;text/plain; charset&#x3D;utf-8\&quot;. | 
 
@@ -232,19 +232,19 @@ No authorization required
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
-# **GroupsGroupNameJobsIdRetryPost**
-> JobWrapper GroupsGroupNameJobsIdRetryPost($groupName, $id)
+# **GroupsNameJobsIdRetryPost**
+> JobWrapper GroupsNameJobsIdRetryPost($name, $id)
 
 Retry a job.
 
-\"The /retry endpoint can be used to force a retry of jobs\nwith status succeeded or cancelled. It can also be used to retry jobs\nthat in the failed state, but whose max_retries field is 0. The retried\njob will continue to have max_retries = 0.\"\n
+\"The /retry endpoint can be used to force a retry of jobs with status succeeded or cancelled. It can also be used to retry jobs that in the failed state, but whose max_retries field is 0. The retried job will continue to have max_retries = 0.\" 
 
 
 ### Parameters
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **groupName** | **string**| Name of group for this set of jobs. | 
+ **name** | **string**| Name of group for this set of jobs. | 
  **id** | **string**| Job id | 
 
 ### Return type
@@ -262,8 +262,8 @@ No authorization required
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
-# **GroupsGroupNameJobsIdStartPost**
-> JobWrapper GroupsGroupNameJobsIdStartPost($groupName, $id, $body)
+# **GroupsNameJobsIdStartPost**
+> JobWrapper GroupsNameJobsIdStartPost($name, $id, $body)
 
 Mark job as started, ie: status = 'running'
 
@@ -274,7 +274,7 @@ Job status is changed to 'running' if it was in a valid state before. Job's `sta
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **groupName** | **string**| Name of group for this set of jobs. | 
+ **name** | **string**| Name of group for this set of jobs. | 
  **id** | **string**| Job id | 
  **body** | [**Start**](Start.md)|  | 
 
@@ -293,8 +293,8 @@ No authorization required
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
-# **GroupsGroupNameJobsIdSuccessPost**
-> JobWrapper GroupsGroupNameJobsIdSuccessPost($groupName, $id)
+# **GroupsNameJobsIdSuccessPost**
+> JobWrapper GroupsNameJobsIdSuccessPost($name, $id, $body)
 
 Mark job as succeeded.
 
@@ -305,8 +305,9 @@ Job status is changed to succeeded if it was in a valid state before. Job's `com
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **groupName** | **string**| Name of group for this set of jobs. | 
+ **name** | **string**| Name of group for this set of jobs. | 
  **id** | **string**| Job id | 
+ **body** | [**Complete**](Complete.md)|  | 
 
 ### Return type
 
@@ -323,19 +324,19 @@ No authorization required
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
-# **GroupsGroupNameJobsIdTouchPost**
-> GroupsGroupNameJobsIdTouchPost($groupName, $id)
+# **GroupsNameJobsIdTouchPost**
+> GroupsNameJobsIdTouchPost($name, $id)
 
 Extend job timeout.
 
-Consumers can sometimes take a while to run the task after accepting it.  An example is when the runner does not have the docker image locally, it can spend a significant time downloading the image.\nIf the timeout is small, the job may never get to run, or run but not be accepted by Titan. Consumers can touch the job before it times out. Titan will reset the timeout, giving the consumer another timeout seconds to run the job.\nTouch is only valid while the job is in a running state. If touch fails, the runner may stop running the job.\n
+Consumers can sometimes take a while to run the task after accepting it.  An example is when the runner does not have the docker image locally, it can spend a significant time downloading the image. If the timeout is small, the job may never get to run, or run but not be accepted by Titan. Consumers can touch the job before it times out. Titan will reset the timeout, giving the consumer another timeout seconds to run the job. Touch is only valid while the job is in a running state. If touch fails, the runner may stop running the job. 
 
 
 ### Parameters
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **groupName** | **string**| Name of group for this set of jobs. | 
+ **name** | **string**| Name of group for this set of jobs. | 
  **id** | **string**| Job id | 
 
 ### Return type
@@ -353,19 +354,19 @@ No authorization required
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
-# **GroupsGroupNameJobsPost**
-> JobsWrapper GroupsGroupNameJobsPost($groupName, $body)
+# **GroupsNameJobsPost**
+> JobsWrapper GroupsNameJobsPost($name, $body)
 
 Enqueue Job
 
-Enqueues job(s). If any of the jobs is invalid, none of the jobs are enqueued.\n
+Enqueues job(s). If any of the jobs is invalid, none of the jobs are enqueued. 
 
 
 ### Parameters
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **groupName** | **string**| name of the group. | 
+ **name** | **string**| name of the group. | 
  **body** | [**NewJobsWrapper**](NewJobsWrapper.md)| Array of jobs to post. | 
 
 ### Return type
