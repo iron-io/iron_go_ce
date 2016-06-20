@@ -3,7 +3,7 @@
     <groupId>com.wordnik</groupId>
     <artifactId>Gotitan</artifactId>
     <packaging>pom</packaging>
-    <version>0.4.2</version>
+    <version>0.4.3</version>
     <name>Gotitan</name>
  <build>
         <plugins>
