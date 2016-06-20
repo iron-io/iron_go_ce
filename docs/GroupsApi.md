@@ -66,7 +66,7 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **GroupsNamePut**
-> GroupWrapper GroupsNamePut($body)
+> GroupWrapper GroupsNamePut($name, $body)
 
 Create/update a job group.
 
@@ -77,6 +77,7 @@ You can set group level settings here.
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
+ **name** | **string**| name of the group. | 
  **body** | [**GroupWrapper**](GroupWrapper.md)| Group to post. | 
 
 ### Return type
