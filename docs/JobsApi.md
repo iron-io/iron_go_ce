@@ -20,7 +20,7 @@ Method | HTTP request | Description
 
 
 # **GroupsNameJobsGet**
-> JobsWrapper GroupsNameJobsGet($name, $createdAfter, $n)
+> JobsWrapper GroupsNameJobsGet($name, $createdAfter, $n, $cursor)
 
 Get job list by group name.
 
@@ -33,7 +33,8 @@ Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **name** | **string**| Name of group for this set of jobs. | 
  **createdAfter** | **time.Time**| Will return jobs created after this time. In RFC3339 format. | [optional] 
- **n** | **int32**| Number of jobs to return. | [optional] 
+ **n** | **int32**| Number of jobs to return per page. Default is 50. Max is 1000. | [optional] 
+ **cursor** | **string**| Pass this in from a previous query to paginate results. | [optional] 
 
 ### Return type
 
