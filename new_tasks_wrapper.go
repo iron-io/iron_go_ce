@@ -22,7 +22,7 @@
 
 package worker
 
-type GroupWrapper struct {
+type NewTasksWrapper struct {
 
-	Group Group `json:"group,omitempty"`
+	Tasks []NewTask `json:"tasks,omitempty"`
 }

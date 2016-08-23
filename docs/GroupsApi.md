@@ -6,7 +6,7 @@ Method | HTTP request | Description
 ------------- | ------------- | -------------
 [**GroupsGet**](GroupsApi.md#GroupsGet) | **Get** /groups | Get all group names.
 [**GroupsNameGet**](GroupsApi.md#GroupsNameGet) | **Get** /groups/{name} | Get information for a group.
-[**GroupsNamePut**](GroupsApi.md#GroupsNamePut) | **Put** /groups/{name} | Create/update a job group.
+[**GroupsNamePut**](GroupsApi.md#GroupsNamePut) | **Put** /groups/{name} | Create/update a task group.
 [**GroupsPost**](GroupsApi.md#GroupsPost) | **Post** /groups | Post new group
 
 
@@ -41,7 +41,7 @@ No authorization required
 
 Get information for a group.
 
-This gives more details about a job group, such as statistics.
+This gives more details about a task group, such as statistics.
 
 
 ### Parameters
@@ -68,7 +68,7 @@ No authorization required
 # **GroupsNamePut**
 > GroupWrapper GroupsNamePut($name, $body)
 
-Create/update a job group.
+Create/update a task group.
 
 You can set group level settings here. 
 
@@ -100,7 +100,7 @@ No authorization required
 
 Post new group
 
-Insert a new job group
+Insert a new task group
 
 
 ### Parameters

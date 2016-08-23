@@ -22,7 +22,12 @@
 
 package worker
 
-type GroupWrapper struct {
+type TasksWrapper struct {
 
-	Group Group `json:"group,omitempty"`
+	Tasks []Task `json:"tasks,omitempty"`
+
+	// Used to paginate results. If this is returned, pass it into the same query again to get more results.
+	Cursor string `json:"cursor,omitempty"`
+
+	Error_ ErrorBody `json:"error,omitempty"`
 }
