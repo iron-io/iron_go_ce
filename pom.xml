@@ -3,7 +3,7 @@
     <groupId>com.wordnik</groupId>
     <artifactId>Goworker</artifactId>
     <packaging>pom</packaging>
-    <version>0.5.3</version>
+    <version>0.5.5</version>
     <name>Goworker</name>
  <build>
         <plugins>
